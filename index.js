@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 
 
@@ -57,9 +58,11 @@ app.use(require('./router/generateOrderId'));
 
 const port = process.env.PORT || 8080;
 
-if(process.env.NODE_ENV=='production'){
-    app.use(express.static("client/build"));
-}
+app.use(express.static("client/build"));
+app.get("/*", function(req, res) {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
 
 app.listen(port,()=>{
     console.log(`the server is running at http://localhost:${port}`)

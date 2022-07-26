@@ -44,7 +44,9 @@ router.post("/api/getSearchedProducts", async (req,res)=>{
     let arrayStr= [];
     try{
         let {search,filterData} = req.body;
-        search = search.toLowerCase();
+        if(search){
+            search = search.toLowerCase();
+        }
 
        
         stringToArray(search,arrayReg,arrayStr);

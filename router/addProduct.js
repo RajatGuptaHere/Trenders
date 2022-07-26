@@ -79,7 +79,6 @@ router.post('/api/addProduct',upload,async (req,res)=>{
                         console.log(err);
                         return;
                     });
-                    console.log(tags);
                     res.status(205).json({exist:"this product already exist"});
                 }else{
                     const newProduct = new Product({productId,img,name,brand,gender,occasion,category,color,stock,discount,

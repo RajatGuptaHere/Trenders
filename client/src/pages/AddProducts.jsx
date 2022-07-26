@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux'
 import axios from 'axios';
 // import FormData from 'react-form-data'
 
-import { backendLink } from '../info';
 
 // import css files 
 import '../styles/addEditProducts.css'
@@ -25,7 +24,6 @@ const AddProducts = () => {
     const [imgAlert, setImgAlert] = useState('none');
     const [incompleteAlert, setIncompleteAlert] = useState('none');
     const [productExistAlert, setProductExistAlert] = useState('none');
-    const [successfullAlert, setSuccessfullAlert] = useState('none');
     const [imgTypeAlert, setImgTypeAlert] = useState('none');
     const [errorAlert, setErrorAlert] = useState('none');
 
@@ -82,39 +80,30 @@ const AddProducts = () => {
         let res = await axios.post(url,formdata);
         try{
             if(res.status==200){
-                setImgAlert('none');
-                setImgTypeAlert('none');
-                setProductExistAlert('none');
-                setIncompleteAlert('none');
-                setSuccessfullAlert('block');
-                setErrorAlert('none');
+                navigate('/success?message=your product is added successfully');
             }else if(res.status==203){
                 setImgAlert('none');
                 setImgTypeAlert('block');
                 setProductExistAlert('none');
                 setIncompleteAlert('none');
-                setSuccessfullAlert('none');
                 setErrorAlert('none')
             }else if(res.status==204){
                 setImgAlert('none');
                 setImgTypeAlert('none');
                 setProductExistAlert('none');
                 setIncompleteAlert('block');
-                setSuccessfullAlert('none');
                 setErrorAlert('none')
             }else if(res.status==205){
                 setImgAlert('none');
                 setImgTypeAlert('none');
                 setProductExistAlert('block');
                 setIncompleteAlert('none');
-                setSuccessfullAlert('none');
                 setErrorAlert('none')
             }else{
                 setImgAlert('none');
                 setImgTypeAlert('none');
                 setProductExistAlert('none');
                 setIncompleteAlert('none');
-                setSuccessfullAlert('none');
                 setErrorAlert('block')
             }
         }catch(err){
@@ -122,7 +111,6 @@ const AddProducts = () => {
             setImgTypeAlert('none');
             setProductExistAlert('none');
             setIncompleteAlert('none');
-            setSuccessfullAlert('none');
             setErrorAlert('block')
         }
             
@@ -142,10 +130,6 @@ const AddProducts = () => {
         <Alert style={{display:incompleteAlert}} onClose={() => setIncompleteAlert('none')} dismissible>
             <Alert.Heading className='font1'>Incomplete!</Alert.Heading>
             <p>It is necessray to fill all the details marked red star</p>
-        </Alert>
-        <Alert style={{display:successfullAlert}} onClose={() => setSuccessfullAlert('none')} dismissible>
-            <Alert.Heading className='font1'>Successfully!</Alert.Heading>
-            <p>Product is added successfully</p>
         </Alert>
         <Alert style={{display:imgTypeAlert}} onClose={() => setImgTypeAlert('none')} dismissible>
             <Alert.Heading className='font1'>Image error!</Alert.Heading>

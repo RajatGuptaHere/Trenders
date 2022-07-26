@@ -6,7 +6,6 @@ import { useSelector,useDispatch } from 'react-redux'
 import '../styles/productPage.css'
 import {AiFillStar} from 'react-icons/ai'
 
-import { backendLink } from '../info'
 import Loading from '../components/Loading'
 import ReviewCard from '../components/ReviewCard'
 import AlertBox from '../components/AlertBox'
@@ -251,7 +250,7 @@ const ProductPage = ({}) => {
             <div className="d-flex justify-content-center mainContainer">
                 <div className="left">
                     <div className="d-flex w-100 justify-content-center">
-                        <img src={backendLink + details.img} alt={details.name} />
+                        <img src={details.img} alt={details.name} />
                     </div>
                     {!isAdmin &&
                         <div className='buttons mt-10'>
@@ -304,8 +303,8 @@ const ProductPage = ({}) => {
                         <div className="d-flex py-2 flex-wrap">
                             {colorsArray.map((value,index)=>(
                                 <a key={index} href={'/product?name='+value.name+'&brand='+value.brand+'&color='+value.color+'&size='+value.size} className='mx-2 my-2 font1'>
-                                    {id==value.productId? <img src={backendLink+value.img} alt={value.productId}  className='active' />
-                                    : <img src={backendLink+value.img} alt={value.productId} />
+                                    {id==value.productId? <img src={value.img} alt={value.productId}  className='active' />
+                                    : <img src={value.img} alt={value.productId} />
                                     }
                                 </a>
                             ))}

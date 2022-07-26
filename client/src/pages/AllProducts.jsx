@@ -160,10 +160,8 @@ const AllProducts = () => {
             });
             let data = await res;
             if(data.status==200){
-                setErrorAlert('none');
-                const response = await GetSearchedProducts();
-                setProductsArray(response);
-                setDeleteBox('none');
+                console.log(searchInput);
+                loadAllData(searchInput);
             }else{
                 setErrorAlert('block');
             }
