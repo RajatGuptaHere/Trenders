@@ -60,7 +60,7 @@ const AddProducts = () => {
         }else{
             setImgAlert('none');
         }
-        const url = backendLink + 'api/addProduct';
+        const url = '/api/addProduct';
         let formdata = new FormData();
         formdata.append('img',inputs.img,inputs.img.name);
         formdata.append('name',inputs.name);
