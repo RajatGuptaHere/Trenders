@@ -5,7 +5,6 @@ import {MdEmail} from 'react-icons/md'
 import {RiLockPasswordFill} from 'react-icons/ri'
 import {AiFillEye} from 'react-icons/ai'
 import {AiFillEyeInvisible} from 'react-icons/ai'
-import {FcGoogle} from 'react-icons/fc'
 
 
 import {LoginRequest} from '../apiCalls/LoginRequest'
@@ -92,11 +91,6 @@ const Login = () => {
                 </div>
             </div>
             <div className="btn bgColor w-100" style={{color:'white'}} onClick={login}>Log IN</div>
-            <div className="font1 subHeading my-2 w-100 text-center">Or</div>
-            <div className="google d-flex">
-                <FcGoogle />
-                <div className="font1">Continue with google</div>
-            </div>
             <div className="d-flex justify-content-center">
                 <div className="font1 me-2">New user ?</div>
                 <Link to='/signup' className='font1 textColor'>Sign Up</Link>

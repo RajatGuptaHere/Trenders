@@ -5,7 +5,6 @@ import {MdEmail} from 'react-icons/md'
 import {RiLockPasswordFill} from 'react-icons/ri'
 import {AiFillEye} from 'react-icons/ai'
 import {AiFillEyeInvisible} from 'react-icons/ai'
-import {FcGoogle} from 'react-icons/fc'
 import {IoIosTimer} from 'react-icons/io'
 
 
@@ -123,11 +122,6 @@ const Signup = () => {
                         </div>
                     </div>
                     <div className="btn bgColor w-100" style={{color:'white'}} onClick={sendOtp}>Send OTP</div>
-                    <div className="font1 subHeading my-2 w-100 text-center">Or</div>
-                    <div className="google d-flex">
-                        <FcGoogle />
-                        <div className="font1">Continue with google</div>
-                    </div>
                     <div className="d-flex justify-content-center">
                         <div className="font1 me-2">Existing user ?</div>
                         <Link to='/login' className='font1 textColor'>Log IN</Link>
