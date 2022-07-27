@@ -5,28 +5,6 @@ const fs = require('fs');
 
 
 
-// function to make array for sizes 
-function toArray(sizes){
-    let sizesArray = [];
-    let s = "";
-    for(let i=0;i<sizes.length;i++){
-        if(sizes[i]==' '){
-            if(s.length >0){
-                sizesArray.push(s);
-                s= "";
-            }
-        }else{
-            s += sizes[i];
-        }
-    }
-    if(s.length >0){
-        sizesArray.push(s);
-        s= "";
-    }
-    return sizesArray;
-}
-
-
 
 // getting the productSchema 
 const Product = require('../schema/productSchema');
@@ -70,41 +48,21 @@ router.post('/api/editProduct',upload,async (req,res)=>{
         if(req.file){
             let img = req.file.filename;
             let imgType = req.file.mimetype;
-            if(!stock || !price || !actualPrice || !description || !pincodes){
-                fs.unlink(req.file.path,(err)=>{
-                    console.log(err);
-                    return;
-                });
-                res.status(204).json({"message":"fill it completely"});
-            }else{
-                if(imgType == "image/jpeg" || imgType == "image/jpg" || imgType == "image/png" || imgType == "image/gif"){
-                    let product = await Product.findOne({productId:productId});
-                    product = product.img;
-                    const data = await Product.findOneAndUpdate({productId:productId},{$set:{img:img,stock:stock,price:price,actualPrice:actualPrice,
-                    description:description,pincodes:pincodes,inTrending:inTrending,discount:discount,
-                    specialOffer:specialOffer}});
-                     fs.unlink('public//'+product,(err)=>{
-                        console.log(err);
-                        return;
-                    });
-                    res.status(200).json({success:"edited successfully"});
-                }else{
-                    fs.unlink(req.file.path,(err)=>{
-                        console.log(err);
-                        return;
-                    });
-                    res.status(203).json({imageError:"image sholud be jpeg png or gif"});
-                }
-            }
+            let product = await Product.findOne({productId:productId});
+            product = product.img;
+            const data = await Product.findOneAndUpdate({productId:productId},{$set:{img:img,stock:stock,price:price,actualPrice:actualPrice,
+            description:description,pincodes:pincodes,inTrending:inTrending,discount:discount,
+            specialOffer:specialOffer}});
+             fs.unlink('public//'+product,(err)=>{
+                console.log(err);
+                return;
+            });
+            res.status(200).json({success:"edited successfully"});
         }else{
-            if(!stock || !price || !actualPrice || !description || !pincodes){
-                res.status(204).json({"message":"fill it completely"});
-            }else{
-               const data = await Product.findOneAndUpdate({productId:productId},{$set:{stock:stock,price:price,actualPrice:actualPrice,
-                description:description,discount:discount,pincodes:pincodes,inTrending:inTrending,specialOffer:specialOffer}});
-                console.log(data);
-                res.status(200).json({success:"edited successfully"});
-            }
+            const data = await Product.findOneAndUpdate({productId:productId},{$set:{stock:stock,price:price,actualPrice:actualPrice,
+             description:description,discount:discount,pincodes:pincodes,inTrending:inTrending,specialOffer:specialOffer}});
+             console.log(data);
+             res.status(200).json({success:"edited successfully"});
         }
         
     }catch(err){

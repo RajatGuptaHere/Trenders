@@ -58,42 +58,24 @@ router.post('/api/addProduct',upload,async (req,res)=>{
         price = parseInt(price);
         actualPrice = parseInt(actualPrice);
         color = color.toLowerCase();
-       
 
-        if(!img || !name || !brand ||  !color || !stock || !price || !actualPrice || !description || !pincodes || !size || !gender || !occasion || !category){
+        let productId = name.toLowerCase()+" "+brand.toLowerCase()+" "+color+" "+size;
+        let discount = parseInt(((actualPrice-price)/actualPrice)*100);
+        let tags = productId+" "+gender+" "+occasion+" "+category;
+        tags = tags.toLowerCase();
+        tags = stringToArray(tags);
+        const productExist = await Product.findOne({productId:productId});
+        if(productExist){
             fs.unlink(req.file.path,(err)=>{
                 console.log(err);
                 return;
             });
-            res.status(204).json({"message":"fill it completely"});
+            res.status(205).json({exist:"this product already exist"});
         }else{
-            if(imgType == "image/jpeg" || imgType == "image/jpg" || imgType == "image/png" || imgType == "image/gif"){
-                let productId = name.toLowerCase()+" "+brand.toLowerCase()+" "+color+" "+size;
-                let discount = parseInt(((actualPrice-price)/actualPrice)*100);
-                let tags = productId+" "+gender+" "+occasion+" "+category;
-                tags = tags.toLowerCase();
-                tags = stringToArray(tags);
-                const productExist = await Product.findOne({productId:productId});
-                if(productExist){
-                    fs.unlink(req.file.path,(err)=>{
-                        console.log(err);
-                        return;
-                    });
-                    res.status(205).json({exist:"this product already exist"});
-                }else{
-                    const newProduct = new Product({productId,img,name,brand,gender,occasion,category,color,stock,discount,
-                        price,actualPrice,description,pincodes,size,inTrending,specialOffer,tags});
-                    await newProduct.save();
-                    res.status(200).json({added:"Product added successfully"});
-                    console.log(tags);
-                }
-            }else{
-                fs.unlink(req.file.path,(err)=>{
-                    console.log(err);
-                    return;
-                });
-                res.status(203).json({imageError:"image sholud be jpeg png or gif"});
-            }
+            const newProduct = new Product({productId,img,name,brand,gender,occasion,category,color,stock,discount,
+                price,actualPrice,description,pincodes,size,inTrending,specialOffer,tags});
+            await newProduct.save();
+            res.status(200).json({added:"Product added successfully"});
         }
     }catch(err){
         fs.unlink(req.file.path,(err)=>{

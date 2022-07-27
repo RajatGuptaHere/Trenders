@@ -9,6 +9,7 @@ import {Alert,Offcanvas,Accordion} from 'react-bootstrap'
 import ProductCard from '../components/ProductCard';
 import Loading from '../components/Loading';
 import Empty from '../components/Empty';
+import AlertBox from '../components/AlertBox';
 
 import '../styles/allProducts.css'
 
@@ -158,25 +159,28 @@ const AllProducts = () => {
                     productId:productId
                 })
             });
-            let data = await res;
-            if(data.status==200){
-                console.log(searchInput);
+            if(res.status==200){
+                setDeleteBox('none');
                 loadAllData(searchInput);
             }else{
+                setDeleteBox('none');
                 setErrorAlert('block');
+                setTimeout(() => {
+                    setErrorAlert('none');
+                }, 2000);
             }
         }catch(err){
+            setDeleteBox('none');
             setErrorAlert('block');
+            setTimeout(() => {
+                setErrorAlert('none');
+            }, 2000);
         }
     }
     
     return (
         <div id='allProducts'>
-
-            <Alert style={{display:errorAlert}} onClose={() => setErrorAlert('none')} dismissible>
-                <Alert.Heading className='font1'>Server Error!</Alert.Heading>
-                <p>There is some problem to delete product . Please try after some time.</p>
-            </Alert>
+             <AlertBox content="Unable to delete,There is some error" status="500" display={errorAlert} />
 
             {/* filter box  */}
             <div className='addFilterButton font1' onClick={handleShow}>

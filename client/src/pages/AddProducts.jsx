@@ -10,6 +10,8 @@ import '../styles/addEditProducts.css'
 import {Alert} from 'react-bootstrap'
 import { categoryArray } from '../information/categoryArrays';
 
+import Loading from '../components/Loading'
+
 const AddProducts = () => {
     // data from redux 
     let {loading=true,status,isAdmin} = useSelector((state)=>state.userDetailsReducer);
@@ -21,11 +23,11 @@ const AddProducts = () => {
     }, [loading])
     
 
-    const [imgAlert, setImgAlert] = useState('none');
     const [incompleteAlert, setIncompleteAlert] = useState('none');
     const [productExistAlert, setProductExistAlert] = useState('none');
     const [imgTypeAlert, setImgTypeAlert] = useState('none');
     const [errorAlert, setErrorAlert] = useState('none');
+    const [loader, setLoader] = useState(false);
 
     // values of all input tags using usestate
     const [inputs, setInputs] = useState({
@@ -55,81 +57,80 @@ const AddProducts = () => {
     }
     // sending data to backend 
     const sendData = async ()=>{
-        if(inputs.img == ""){
-            setImgAlert('block')
-        }else{
-            setImgAlert('none');
-        }
-        const url = '/api/addProduct';
-        let formdata = new FormData();
-        formdata.append('img',inputs.img,inputs.img.name);
-        formdata.append('name',inputs.name);
-        formdata.append('brand',inputs.brand);
-        formdata.append('color',inputs.color);
-        formdata.append('occasion',inputs.occasion);
-        formdata.append('category',inputs.category);
-        formdata.append('gender',inputs.gender);
-        formdata.append('stock',inputs.stock);
-        formdata.append('price',inputs.price);
-        formdata.append('actualPrice',inputs.actualPrice);
-        formdata.append('description',inputs.description);
-        formdata.append('pincodes',inputs.pincodes);
-        formdata.append('size',inputs.size);
-        formdata.append('inTrending',inputs.inTrending);
-        formdata.append('specialOffer',inputs.specialOffer);
-        let res = await axios.post(url,formdata);
         try{
-            if(res.status==200){
-                navigate('/success?message=your product is added successfully');
-            }else if(res.status==203){
-                setImgAlert('none');
-                setImgTypeAlert('block');
-                setProductExistAlert('none');
-                setIncompleteAlert('none');
-                setErrorAlert('none')
-            }else if(res.status==204){
-                setImgAlert('none');
-                setImgTypeAlert('none');
-                setProductExistAlert('none');
-                setIncompleteAlert('block');
-                setErrorAlert('none')
-            }else if(res.status==205){
-                setImgAlert('none');
-                setImgTypeAlert('none');
-                setProductExistAlert('block');
-                setIncompleteAlert('none');
-                setErrorAlert('none')
+            if(!inputs.name || !inputs.brand ||  !inputs.color || !inputs.stock || !inputs.price || !inputs.actualPrice || 
+                !inputs.description || !inputs.pincodes || !inputs.size || !inputs.gender || !inputs.occasion || !inputs.category){
+                    setImgTypeAlert('none');
+                    setProductExistAlert('none');
+                    setIncompleteAlert('block');
+                    setErrorAlert('none');
             }else{
-                setImgAlert('none');
-                setImgTypeAlert('none');
-                setProductExistAlert('none');
-                setIncompleteAlert('none');
-                setErrorAlert('block')
+                if(inputs.img.type == "image/jpeg" || inputs.img.type == "image/jpg" || inputs.img.type == "image/png" || inputs.img.type == "image/gif"){
+                    setLoader(true);
+                    const url = '/api/addProduct';
+                    let formdata = new FormData();
+                    formdata.append('img',inputs.img,inputs.img.name);
+                    formdata.append('name',inputs.name);
+                    formdata.append('brand',inputs.brand);
+                    formdata.append('color',inputs.color);
+                    formdata.append('occasion',inputs.occasion);
+                    formdata.append('category',inputs.category);
+                    formdata.append('gender',inputs.gender);
+                    formdata.append('stock',inputs.stock);
+                    formdata.append('price',inputs.price);
+                    formdata.append('actualPrice',inputs.actualPrice);
+                    formdata.append('description',inputs.description);
+                    formdata.append('pincodes',inputs.pincodes);
+                    formdata.append('size',inputs.size);
+                    formdata.append('inTrending',inputs.inTrending);
+                    formdata.append('specialOffer',inputs.specialOffer);
+                    let res = await axios.post(url,formdata);
+                    if(res.status==200){
+                        setLoader(false);
+                        navigate('/success?message=your product is added successfully');
+                    }else if(res.status==205){
+                        setLoader(false);
+                        setImgTypeAlert('none');
+                        setProductExistAlert('block');
+                        setIncompleteAlert('none');
+                        setErrorAlert('none');
+                    }else{
+                        setLoader(false);
+                        setImgTypeAlert('block');
+                        setProductExistAlert('none');
+                        setIncompleteAlert('none');
+                        setErrorAlert('none');
+                    }
+                }else{
+                    setLoader(false);
+                    setImgTypeAlert('block');
+                    setProductExistAlert('none');
+                    setIncompleteAlert('none');
+                    setErrorAlert('none');
+                }
             }
         }catch(err){
-            setImgAlert('none');
+            setLoader(false);
             setImgTypeAlert('none');
             setProductExistAlert('none');
             setIncompleteAlert('none');
             setErrorAlert('block')
-        }
-            
+        }            
     }
 
   return (
     <div id='addEditProducts' className='form'>
+
+        {loader && <Loading />}
+
         {/* alerts  */}
-        <Alert style={{display:imgAlert}} onClose={() => setImgAlert('none')} dismissible>
-            <Alert.Heading className='font1'>Image error!</Alert.Heading>
-            <p>It is important to uplaod the image</p>
-        </Alert>
         <Alert style={{display:productExistAlert}} onClose={() => setProductExistAlert('none')} dismissible>
             <Alert.Heading className='font1'>Product Exist!</Alert.Heading>
             <p>Product of same name , color and brand ans size already exist . Please try again with a different product</p>
         </Alert>
         <Alert style={{display:incompleteAlert}} onClose={() => setIncompleteAlert('none')} dismissible>
             <Alert.Heading className='font1'>Incomplete!</Alert.Heading>
-            <p>It is necessray to fill all the details marked red star</p>
+            <p>It is necessray to fill all the details</p>
         </Alert>
         <Alert style={{display:imgTypeAlert}} onClose={() => setImgTypeAlert('none')} dismissible>
             <Alert.Heading className='font1'>Image error!</Alert.Heading>

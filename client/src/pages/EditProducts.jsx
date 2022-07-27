@@ -9,6 +9,8 @@ import axios from 'axios';
 import '../styles/addEditProducts.css'
 import {Alert} from 'react-bootstrap'
 
+import Loading from '../components/Loading'
+
 
 import { SelectedProductsDetails } from '../apiCalls/SelectedProductsDetails';
 
@@ -21,9 +23,9 @@ const EditProducts = () => {
 
     // for all alerts 
     const [incompleteAlert, setIncompleteAlert] = useState('none');
-    const [successfullAlert, setSuccessfullAlert] = useState('none');
     const [imgTypeAlert, setImgTypeAlert] = useState('none');
     const [errorAlert, setErrorAlert] = useState('none');
+    const [loader, setLoader] = useState(false);
 
     const [isDataFetched, setIsDataFetched] = useState(false);
 
@@ -73,69 +75,67 @@ const EditProducts = () => {
         val = e.target.files[0];
         setInputs({...inputs,'img':val});
     }
+    function checkImgType(imgType){
+        if(inputs.img.type == "image/jpeg" || inputs.img.type == "image/jpg" || inputs.img.type == "image/png" || inputs.img.type == "image/gif"){
+            return true;
+        }
+        return false;
+    }
     // sending data to backend 
     const sendData = async ()=>{
-        console.log(inputs.inTrending,inputs.specialOffer);
-        const url = '/api/editProduct';
-        let formdata = new FormData();
-        if(inputs.img != undefined){
-            formdata.append('img',inputs.img,inputs.img.name);
-        }
-        formdata.append('productId',inputs.productId);
-        formdata.append('stock',inputs.stock);
-        formdata.append('price',inputs.price);
-        formdata.append('actualPrice',inputs.actualPrice);
-        formdata.append('description',inputs.description);
-        formdata.append('pincodes',inputs.pincodes);
-        formdata.append('specialOffer',inputs.specialOffer);
-        formdata.append('inTrending',inputs.inTrending);
-        let res = await axios.post(url,formdata);
         try{
-            if(res.status==200){
-                setImgTypeAlert('none');
-                setIncompleteAlert('none');
-                setSuccessfullAlert('block');
-                setErrorAlert('none');
-            }else if(res.status==203){
-                setImgTypeAlert('block');
-                setIncompleteAlert('none');
-                setSuccessfullAlert('none');
-                setErrorAlert('none')
-            }else if(res.status==204){
+            if(!inputs.stock || !inputs.price || !inputs.actualPrice || !inputs.description || !inputs.pincodes){
                 setImgTypeAlert('none');
                 setIncompleteAlert('block');
-                setSuccessfullAlert('none');
-                setErrorAlert('none')
-            }else if(res.status==205){
-                setImgTypeAlert('none');
-                setIncompleteAlert('none');
-                setSuccessfullAlert('none');
                 setErrorAlert('none')
             }else{
-                setImgTypeAlert('none');
-                setIncompleteAlert('none');
-                setSuccessfullAlert('none');
-                setErrorAlert('block')
+                if((inputs.img && checkImgType(inputs.img.type)) || (!inputs.img)){
+                    const url = '/api/editProduct';
+                    let formdata = new FormData();
+                    if(inputs.img != undefined){
+                        formdata.append('img',inputs.img,inputs.img.name);
+                    }
+                    formdata.append('productId',inputs.productId);
+                    formdata.append('stock',inputs.stock);
+                    formdata.append('price',inputs.price);
+                    formdata.append('actualPrice',inputs.actualPrice);
+                    formdata.append('description',inputs.description);
+                    formdata.append('pincodes',inputs.pincodes);
+                    formdata.append('specialOffer',inputs.specialOffer);
+                    formdata.append('inTrending',inputs.inTrending);
+                    setLoader(true);
+                    let res = await axios.post(url,formdata);
+                    if(res.status==200){
+                        setLoader(false);
+                        navigate('/success?message=your product is edited successfully');
+                    }else{
+                        setLoader(false);
+                        setImgTypeAlert('none');
+                        setIncompleteAlert('none');
+                        setErrorAlert('block')
+                    }           
+                }else{
+                    setImgTypeAlert('block');
+                    setIncompleteAlert('none');
+                    setErrorAlert('none')
+                }
             }
         }catch(err){
             setImgTypeAlert('none');
             setIncompleteAlert('none');
-            setSuccessfullAlert('none');
             setErrorAlert('block')
         }
-            
     }
 
   return (
     <div id='addEditProducts' className='form'>
+
+        {loader && <Loading />}
+
         {/* alerts  */}
         <Alert style={{display:incompleteAlert}} onClose={() => setIncompleteAlert('none')} dismissible>
             <Alert.Heading className='font1'>Incomplete!</Alert.Heading>
             <p>Only image  box can be left emptied</p>
-        </Alert>
-        <Alert style={{display:successfullAlert}} onClose={() => setSuccessfullAlert('none')} dismissible>
-            <Alert.Heading className='font1'>Successfully edited!</Alert.Heading>
-            <p>Product is changed successfully</p>
         </Alert>
         <Alert style={{display:imgTypeAlert}} onClose={() => setImgTypeAlert('none')} dismissible>
             <Alert.Heading className='font1'>Image error!</Alert.Heading>

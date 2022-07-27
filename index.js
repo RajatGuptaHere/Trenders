@@ -56,7 +56,7 @@ app.use(require('./router/deliverProduct'));
 app.use(require('./router/generateOrderId'));
 
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 app.use(express.static("client/build"));
 app.get("/*", function(req, res) {

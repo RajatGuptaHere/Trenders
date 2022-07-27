@@ -30,6 +30,8 @@ import UserOrders from './pages/UserOrders';
 import NewOrders from './pages/NewOrders';
 import SearchBarPage from './pages/SearchBarPage';
 
+import ScrollToTop from './ScrollToTop';
+
 
 // importing css 
 import './styles/global.css';
@@ -53,6 +55,7 @@ function App() {
 	
 	useEffect(() => {
 		loadAllData();
+		window.scrollTo(0, 0)
 	}, [])
 	
 
@@ -63,6 +66,7 @@ function App() {
 		
 		<BrowserRouter>
 			<div>
+				<ScrollToTop />
 				<Navbar />
 				<Routes>
 					<Route exact path="/" element={<Home />} />

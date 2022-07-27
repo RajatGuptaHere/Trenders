@@ -44,17 +44,22 @@ const Navbar = () => {
     const ordersInfo = useSelector((state)=>state.ordersForAdminReducer);
 
     const [searchInput, setSearchInput] = useState("");
-    let search = new URLSearchParams(window.location.search).get('search');
     useEffect(() => {
+        setShow(false);
+        let search = new URLSearchParams(window.location.search).get('search');
+        setShow(false);
         if(search){
             setSearchInput(search);
+        }else{
+            setSearchInput("");
         }
+
         if(status == 200){
             setUserExist(true);
         }else{
             setUserExist(false);
         }
-    }, [loading,searchInput])
+    }, [loading,searchInput,window.location.href])
 
 
     const navigate = useNavigate();
