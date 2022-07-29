@@ -43,7 +43,7 @@ router.post("/api/getSearchedProducts", async (req,res)=>{
     let arrayReg=[];
     let arrayStr= [];
     try{
-        let {search,filterData} = req.body;
+        let {search,filterData,type} = req.body;
         if(search){
             search = search.toLowerCase();
         }
@@ -61,11 +61,26 @@ router.post("/api/getSearchedProducts", async (req,res)=>{
             products = await Product.find({tags:{$in:arrayReg}});
         }
 
-
-        if(filterData){
-            let filterProducts = await Product.find(filterData);
-            products = products.filter(item1 => filterProducts.some(item2 => item1.id === item2.id));
+        let didntEexist=true,common;
+        let nameBrandArray = [];
+        let brandAndName;
+        if(!filterData){
+            filterData = {};
         }
+        let filterProducts = await Product.find(filterData);
+        products = products.filter((item1) => {
+            common = filterProducts.some(item2 => item1.id === item2.id);
+            brandAndName = item1.brand + item1.name;
+            if(type=='user'){
+                if(nameBrandArray.includes(brandAndName)){
+                    didntEexist = false;
+                }else{
+                    didntEexist = true;
+                    nameBrandArray.push(brandAndName);
+                }
+            }
+            return common && didntEexist
+        });
 
         
         products.reverse();

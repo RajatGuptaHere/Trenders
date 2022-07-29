@@ -91,7 +91,7 @@ const Login = () => {
                 </div>
             </div>
             <div className="btn bgColor w-100" style={{color:'white'}} onClick={login}>Log IN</div>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mt-2">
                 <div className="font1 me-2">New user ?</div>
                 <Link to='/signup' className='font1 textColor'>Sign Up</Link>
             </div>

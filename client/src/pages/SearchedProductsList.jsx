@@ -38,7 +38,7 @@ const SearchedProductsList = () => {
     const search = new URLSearchParams(window.location.search).get('search');
     async function loadAllData(search,filterData) {
         setAreProductsFetched(false);
-        const response = await GetSearchedProducts(search,filterData);
+        const response = await GetSearchedProducts(search,filterData,'user');
         setProductsArray(response);
         await setAreProductsFetched(true);
     }
@@ -98,7 +98,7 @@ const SearchedProductsList = () => {
             filterData['price'] = {$gte:min};
         }
 
-        loadAllData(search,filterData);
+        loadAllData(search,filterData,'user');
         setShow(false);
     }
 
