@@ -326,13 +326,13 @@ const ProductPage = ({}) => {
 
                     
 
-                    {!isAdmin && <div className="checkPincode d-flex mt-3 mb-2">
+                    {/* {!isAdmin && <div className="checkPincode d-flex mt-3 mb-2">
                         <input name='pincode' type="text" placeholder='Enter pincode' value={inputs.pincode} onChange={handleChange} maxLength='6' />
                         {validatePincode(inputs.pincode) &&  <div className="btn" onClick={()=>{checkForPin(details.productId,inputs.pincode)}}>Check</div>}
                     </div>}
                     {availableForPincode==null && <div></div>}
                     {availableForPincode==true && <div className='font1' style={{color:'green'}}>Yes it is delevirable</div>}
-                    {availableForPincode==false && <div className='font1' style={{color:'red'}}>Not deleverable to this pincode</div>}
+                    {availableForPincode==false && <div className='font1' style={{color:'red'}}>Not deleverable to this pincode</div>} */}
                                     
                     {!isAdmin && <div className="btn rateProduct mt-4" onClick={showHide}>Rate Product</div>}
                     <div className="text-danger font1 mt-2" style={{display:cantRate}}>You can't rate as you have not ordered the product</div>

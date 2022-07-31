@@ -117,14 +117,14 @@ const Payment = () => {
 				}, 5000);
 				return;
 			}
-			if(!orderCartArray[i].pincodes.includes(userInfo.pin)){
-				setOrderplacingLoading(false);
-				setNoteliverableError('flex');
-				setTimeout(() => {
-					setNoteliverableError('none');
-				}, 5000);
-				return;
-			}
+			// if(!orderCartArray[i].pincodes.includes(userInfo.pin)){
+			// 	setOrderplacingLoading(false);
+			// 	setNoteliverableError('flex');
+			// 	setTimeout(() => {
+			// 		setNoteliverableError('none');
+			// 	}, 5000);
+			// 	return;
+			// }
 			cart.push({productId:orderCartArray[i].productId,qty:orderCartArray[i].qty,img:orderCartArray[i].img
 			,price:orderCartArray[i].price,brand:orderCartArray[i].brand,name:orderCartArray[i].name,color:orderCartArray[i].color,
 		size:orderCartArray[i].size});

@@ -151,9 +151,9 @@ const CartProductCard = ({product,type,changeQty,removeFromOrder}) => {
                     }
                     {product.stock<qty && product.stock>0 &&<div className="font1 text-danger mt-2 subHeading">only {product.stock} are available</div>}
 
-                    {userInfo.pin && !product.pincodes.includes(userInfo.pin) &&
+                    {/* {userInfo.pin && !product.pincodes.includes(userInfo.pin) &&
                         <div className="font1 text-danger mt-2 subHeading">Not deliverable to your city</div>
-                    }
+                    } */}
 
                     
                 </Card.Text>
