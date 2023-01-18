@@ -58,7 +58,7 @@ app.use(require('./router/generateOrderId'));
 
 const port = process.env.PORT || 8000;
 
-app.use(express.static("client/build"));
+app.use(express.static("./client/build"));
 app.get("/*", function(req, res) {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
